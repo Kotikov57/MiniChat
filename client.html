@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Чат-приложение</title>
+    <script>
+        let socket;
+
+        function connect() {
+            socket = new WebSocket("ws://localhost:8080/ws");
+
+            socket.onmessage = function(event) {
+                const message = document.createElement("div");
+                message.textContent = event.data;
+                document.getElementById("chat").appendChild(message);
+            };
+
+            document.getElementById("send").onclick = function() {
+                const messageInput = document.getElementById("message");
+                socket.send(messageInput.value);
+                messageInput.value = "";
+            };
+        }
+
+        window.onload = connect;
+    </script>
+</head>
+<body>
+    <h1>Чат</h1>
+    <div id="chat" style="border: 1px solid #ccc; height: 300px; overflow-y: scroll;"></div>
+    <input type="text" id="message" placeholder="Введите сообщение...">
+    <button id="send">Отправить</button>
+</body>
+</html>
